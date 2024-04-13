@@ -230,49 +230,6 @@ def contar_palavras(matriz, matrizContador):
     
     return palavras
 
-def contar_palavrasA(matriz, matrizContador):
-    altura = len(matriz)
-    largura = len(matriz[0])
-    matriz_Palavra_Virar_quadrado = InicializarMatriz(altura,largura)
-    #Todas as imagens começa na altura = 179
-    y = 179
-    palavras = 0
-    dentro_dePalavra = 0
-    paragrafo = 1
-
-    # Enquanto a altura atual não for superior a altura maxima, continue
-    while (y < altura):
-        dentro_dePalavra = 0
-        paragrafo = paragrafo + 1
-        for x in range(largura):
-            cont = 0
-            # Cada iteração é passada uma mascara de 17x1
-            for j in range(-9,9):
-                if 0 <= y+j < altura:
-                    # Se encontrar alguma parte preta, pare, pois encontrou alguma palavra, ou ta dentro de uma
-                    if matriz[y+j][x] == str(matrizContador[j+9][0]):
-                        break
-                    else:
-                        cont = cont + 1
-            # Se pelomenos encontrar uma bit preto, ainda estará dentro de uma palavra
-            if cont != 18 and dentro_dePalavra != 1 and y != altura-3 :
-                matriz_Palavra_Virar_quadrado[y][x] = str(1)
-                dentro_dePalavra = 1
-            # Se todas os bit forem branco, nao esta dentro da palavra
-            if cont >= 18:
-                dentro_dePalavra = 0
-        # Cada linha tem uma altura alternada, fiz isso para na doidice, mas funcionar kk
-        if paragrafo >= 2:
-            y = y + 39
-            paragrafo = 0
-        else:
-            paragrafo = paragrafo + 1
-            y = y + 38
-    
-    matriz_Dilatada = dilatar(matriz_Palavra_Virar_quadrado,matrizB,5)
-    matriz_para_pbm(matriz_Dilatada, "imagem2Palavras.pbm")
-
-    return palavras
 
 def contar_coluna(matriz, matrizContador):
     altura = len(matriz)
@@ -280,6 +237,7 @@ def contar_coluna(matriz, matrizContador):
     coluna = 0
     mesmaColuna = 1
     espaco = 0
+    falsaColuna = 0
     y = 179
     for x in range(largura):
         cont = 0
@@ -294,10 +252,20 @@ def contar_coluna(matriz, matrizContador):
         else:
             if cont >= 18:
                 espaco = espaco + 1
-                if (espaco >= 34 and espaco <= 36) and mesmaColuna == 0:
-                    print("Matriz: ", y+3, x)
-                    coluna = coluna + 1
-                    mesmaColuna = 1
+                if (espaco >= 34) and mesmaColuna == 0:
+                    print("Matriz: ", y+3, x, espaco)
+                    falsaColuna = 0
+                    for l in range(altura):
+                        if (y+l >= 0 and y+l < altura):
+                            if (matriz[y+l][x-17] == str(1)):
+                                print("Matriz: ", y+l, x)
+                                falsaColuna = 1
+                                break
+                    if (falsaColuna == 0):
+                        coluna = coluna + 1
+                        mesmaColuna = 1
+                    else:
+                        mesmaColuna = 0
     
     return coluna
 
@@ -324,7 +292,7 @@ matrizB =  [    [1,1,1,1,1,1,1,1,1,1,0,1,1],
 
 
 # Exemplo de uso
-i = 3
+i = 4
 nome_arquivo = (f'Imagem{i}.pbm')
 nome_arquivo_corrigido = (f'Imagem{i}Corrigido.pbm')
 #
@@ -334,17 +302,17 @@ img = Image.open(nome_arquivo)
 ### transformar em um array de True e False
 matriz = np.array(img)
 ### Trocar os True e False por 0 e 1
-#matriz_ajustada = ajustar_IMG(matriz, nome_arquivo_corrigido)
+matriz_ajustada = ajustar_IMG(matriz, nome_arquivo_corrigido)
 
 # Aplica o filtro da mediana
 ### Tempo de 30 segundos ou menos
-#matrizA = filtro_mediana(matriz_ajustada,3)
+matrizA = filtro_mediana(matriz_ajustada,3)
 
 ### Aplica a dilatação com mascara da MatrizB, 11x11
-#matrizC = dilatar(matrizA, matrizB, 11)
+matrizC = dilatar(matrizA, matrizB, 11)
 #matriz_para_pbm(matrizC, "Imagem1Dilatada11x11.pbm")
 #matriz_para_pbm(matrizC, f"Imagem{i}Dilatada11x11.pbm")
-matrizC = ler_imagem_pbm(f'Imagem{i}Dilatada11x11.pbm')
+#matrizC = ler_imagem_pbm(f'Imagem{i}Dilatada11x11.pbm')
 print(contar_palavras(matrizC, contador))
 print(contar_coluna(matrizC, contador))
 
