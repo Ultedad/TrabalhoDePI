@@ -186,9 +186,12 @@ def contar_palavras(matriz, matrizContador):
     largura = len(matriz[0])
     #Todas as imagens começa na altura = 179
     y = 179
-    palat = 1
+    linha = 0
     palavras = 0
+
     dentro_dePalavra = 0
+    mesmaLinha = 0
+
     paragrafo = 1
 
     # Enquanto a altura atual não for superior a altura maxima, continue
@@ -207,8 +210,9 @@ def contar_palavras(matriz, matrizContador):
                         cont = cont + 1
             # Se pelomenos encontrar uma bit preto, ainda estará dentro de uma palavra
             if cont != 18 and dentro_dePalavra != 1 and y != altura-3 :
-                print("Matriz: ", y+3, x, palat)
-                palat = palat + 1
+                if (mesmaLinha == 0):
+                    mesmaLinha = 1
+                    linha = linha + 1
                 palavras = palavras + 1
                 dentro_dePalavra = 1
             # Se todas os bit forem branco, nao esta dentro da palavra
@@ -216,15 +220,14 @@ def contar_palavras(matriz, matrizContador):
                 dentro_dePalavra = 0
         # Cada linha tem uma altura alternada, fiz isso para na doidice, mas funcionar kk
         if paragrafo >= 2:
-            palat = 1
+            mesmaLinha = 0
             y = y + 39
             paragrafo = 0
         else:
+            mesmaLinha = 0
             paragrafo = paragrafo + 1
-            palat = 1
             y = y + 38
     
-
     return palavras
 
 def contar_palavrasA(matriz, matrizContador):
@@ -271,6 +274,34 @@ def contar_palavrasA(matriz, matrizContador):
 
     return palavras
 
+def contar_coluna(matriz, matrizContador):
+    altura = len(matriz)
+    largura = len(matriz[0])
+    coluna = 0
+    mesmaColuna = 1
+    espaco = 0
+    y = 179
+    for x in range(largura):
+        cont = 0
+        for j in range(-9,9):
+            if matriz[y+j][x] == str(matrizContador[j+9][0]):
+                break
+            else:
+                cont = cont + 1
+        if cont != 18:
+            mesmaColuna = 0
+            espaco = 0
+        else:
+            if cont >= 18:
+                espaco = espaco + 1
+                if (espaco >= 34 and espaco <= 36) and mesmaColuna == 0:
+                    print("Matriz: ", y+3, x)
+                    coluna = coluna + 1
+                    mesmaColuna = 1
+    
+    return coluna
+
+
 
 # Mascara 17x1 para passar em cada palavra
 contador = [[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1],[1]]
@@ -291,19 +322,17 @@ matrizB =  [    [1,1,1,1,1,1,1,1,1,1,0,1,1],
                 [1,1,1,1,1,1,1,1,1,1,0,1,1]
                 ]
 
+
 # Exemplo de uso
-nome_arquivo1 = 'imagemComRuidos1.pbm'
-nome_arquivo = 'imagemComRuidos.pbm'
-nome_arquivo_corrigido = 'imagemComRuidosCorrigido.pbm'
-nome_arquivo_corrigido1 = 'imagemComRuidosCorrigido1.pbm'
-nome_arquivo_filtrado = 'imagemSemRuidos.pbm'
-nome_arquivo_dilatado = 'imagemDilatado9x9.pbm'
+i = 3
+nome_arquivo = (f'Imagem{i}.pbm')
+nome_arquivo_corrigido = (f'Imagem{i}Corrigido.pbm')
 #
 
 ### Ler a imagem com "open"
-#img = Image.open(nome_arquivo)
+img = Image.open(nome_arquivo)
 ### transformar em um array de True e False
-#matriz = np.array(img)
+matriz = np.array(img)
 ### Trocar os True e False por 0 e 1
 #matriz_ajustada = ajustar_IMG(matriz, nome_arquivo_corrigido)
 
@@ -314,8 +343,10 @@ nome_arquivo_dilatado = 'imagemDilatado9x9.pbm'
 ### Aplica a dilatação com mascara da MatrizB, 11x11
 #matrizC = dilatar(matrizA, matrizB, 11)
 #matriz_para_pbm(matrizC, "Imagem1Dilatada11x11.pbm")
-matrizC = ler_imagem_pbm('Imagem1Dilatada11x11.pbm')
+#matriz_para_pbm(matrizC, f"Imagem{i}Dilatada11x11.pbm")
+matrizC = ler_imagem_pbm(f'Imagem{i}Dilatada11x11.pbm')
 print(contar_palavras(matrizC, contador))
+print(contar_coluna(matrizC, contador))
 
 # Para que cada palavra vire um quadrado, utilize essa função contar_palavras:
 # É demorada, mas espere kkk
