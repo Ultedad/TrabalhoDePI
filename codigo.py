@@ -228,7 +228,7 @@ def contar_palavras(matriz, matrizContador):
             paragrafo = paragrafo + 1
             y = y + 38
     
-    return palavras
+    print(palavras, linha)
 
 
 def contar_coluna(matriz, matrizContador):
@@ -267,7 +267,7 @@ def contar_coluna(matriz, matrizContador):
                     else:
                         mesmaColuna = 0
     
-    return coluna
+    print(coluna)
 
 
 
@@ -292,29 +292,32 @@ matrizB =  [    [1,1,1,1,1,1,1,1,1,1,0,1,1],
 
 
 # Exemplo de uso
-i = 4
+i = 6
 nome_arquivo = (f'Imagem{i}.pbm')
 nome_arquivo_corrigido = (f'Imagem{i}Corrigido.pbm')
 #
 
 ### Ler a imagem com "open"
-img = Image.open(nome_arquivo)
+#img = Image.open(nome_arquivo)
 ### transformar em um array de True e False
-matriz = np.array(img)
+#matriz = np.array(img)
 ### Trocar os True e False por 0 e 1
-matriz_ajustada = ajustar_IMG(matriz, nome_arquivo_corrigido)
+#matriz_ajustada = ajustar_IMG(matriz, nome_arquivo_corrigido)
 
 # Aplica o filtro da mediana
 ### Tempo de 30 segundos ou menos
-matrizA = filtro_mediana(matriz_ajustada,3)
+#matrizA = filtro_mediana(matriz_ajustada,3)
 
 ### Aplica a dilatação com mascara da MatrizB, 11x11
-matrizC = dilatar(matrizA, matrizB, 11)
+#matrizC = dilatar(matrizA, matrizB, 11)
 #matriz_para_pbm(matrizC, "Imagem1Dilatada11x11.pbm")
 #matriz_para_pbm(matrizC, f"Imagem{i}Dilatada11x11.pbm")
 #matrizC = ler_imagem_pbm(f'Imagem{i}Dilatada11x11.pbm')
-print(contar_palavras(matrizC, contador))
-print(contar_coluna(matrizC, contador))
+matrizC = ler_imagem_pbm("Imagem6Corrigido.pbm")
+matrizD = dilatar(matrizC, matrizB, 11)
+contar_palavras(matrizD, contador)
+contar_coluna(matrizC, contador)
+
 
 # Para que cada palavra vire um quadrado, utilize essa função contar_palavras:
 # É demorada, mas espere kkk
