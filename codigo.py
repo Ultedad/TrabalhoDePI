@@ -196,7 +196,6 @@ def contar_palavras(matriz, matrizContador):
     paragrafo = 1
     invalido = 0
 
-    ada = 1
 
     # Enquanto a altura atual não for superior a altura maxima, continue
     while (y < altura):
@@ -216,11 +215,9 @@ def contar_palavras(matriz, matrizContador):
                     invalido = 1
             # Se pelomenos encontrar uma bit preto, ainda estará dentro de uma palavra
             if cont != 18 and dentro_dePalavra != 1 and invalido == 0 :
-                print("Matriz: ", y+3, x, ada)
                 if (mesmaLinha == 0):
                     mesmaLinha = 1
                     linha = linha + 1
-                ada = ada + 1
                 invalido = 0
                 palavras = palavras + 1
                 dentro_dePalavra = 1
@@ -229,12 +226,10 @@ def contar_palavras(matriz, matrizContador):
                 dentro_dePalavra = 0
         # Cada linha tem uma altura alternada, fiz isso para na doidice, mas funcionar kk
         if paragrafo >= 2:
-            ada = 1
             mesmaLinha = 0
             y = y + 39
             paragrafo = 0
         else:
-            ada = 1
             mesmaLinha = 0
             paragrafo = paragrafo + 1
             y = y + 38
