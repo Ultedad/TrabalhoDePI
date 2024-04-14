@@ -234,7 +234,8 @@ def contar_palavras(matriz, matrizContador):
             paragrafo = paragrafo + 1
             y = y + 38
     
-    print(palavras, linha)
+    print("Quantidade de palavras: ", palavras)
+    print("Quantidade de linhas: ", linha)
 
 
 def contar_coluna(matriz, matrizContador):
@@ -271,7 +272,7 @@ def contar_coluna(matriz, matrizContador):
                     else:
                         mesmaColuna = 0
     
-    print(coluna)
+    print("Quantidade de Coluna: ", coluna)
 
 
 
@@ -296,10 +297,8 @@ matrizB =  [    [0,1,1,1,1,1,1,1,1,1,0,1,1],
 
 
 # Exemplo de uso
-i = 4
-nome_arquivo = (f'Imagem{i}.pbm')
-nome_arquivo_corrigido = (f'Imagem{i}Corrigido.pbm')
-#
+nome_arquivo = "grupo_20_imagem_2_linhas_51_palavras_520.pbm"
+nome_arquivo_corrigido = "grupo_20_imagem_2_linhas_51_palavras_520Corrigido.pbm"
 
 ### Ler a imagem com "open"
 img = Image.open(nome_arquivo)
@@ -314,12 +313,10 @@ matrizA = filtro_mediana(matriz_ajustada,3)
 ### Aplica a dilatação com mascara da MatrizB, 11x11
 matrizC = dilatar(matrizA, matrizB, 11)
 
-#Matriz para imagem
-#matriz_para_pbm(matrizC, f'Imagem{i}Dilatada11x11.pbm')
 
 ### Contagem...
-contar_palavras(matrizC, contadora)
-contar_coluna(matrizA, contadora)
+contar_palavras(matrizC, contador)
+contar_coluna(matriz_ajustada, contador)
 
 
 # Para que cada palavra vire um quadrado, utilize essa função contar_palavras:
